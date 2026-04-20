@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 const Hero = () => {
   return (
-    <section className="min-h-screen flex flex-col justify-center px-[5%] pt-32 pb-20 relative overflow-hidden">
+    <section className="min-h-screen flex flex-col justify-center px-[5%] pt-20 pb-20 relative overflow-hidden">
       {/* Background Orbs */}
       <div className="absolute inset-0 z-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_20%,rgba(64,145,108,0.13)_0%,transparent_70%),radial-gradient(ellipse_40%_60%_at_10%_80%,rgba(26,71,49,0.08)_0%,transparent_60%)]"></div>
       <div className="absolute inset-0 z-0 opacity-[0.04] grid-lines"></div>

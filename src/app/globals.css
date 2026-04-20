@@ -20,6 +20,12 @@
 @theme {
   --font-serif: var(--font-dm-serif), serif;
   --font-sans: var(--font-dm-sans), sans-serif;
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
 }
 
 @layer base {
