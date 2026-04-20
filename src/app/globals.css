@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+:root {
+  --pine: #1a4731;
+  --pine-mid: #2d6a4f;
+  --pine-light: #40916c;
+  --pine-pale: #d8f3dc;
+  --pine-glow: #b7e4c7;
+  --cream: #faf7f2;
+  --cream-dark: #f0ebe0;
+  --ink: #12160f;
+  --ink-mid: #3a4035;
+  --ink-soft: #6b7266;
+  --gold: #c9a84c;
+  --gold-light: #f0d080;
+  --white: #ffffff;
+  --radius: 16px;
+}
+
+@theme {
+  --font-serif: var(--font-dm-serif), serif;
+  --font-sans: var(--font-dm-sans), sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-[var(--cream)] text-[var(--ink)] antialiased;
+    font-family: var(--font-sans);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-serif);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[var(--pine)] text-white px-8 py-3.5 rounded-full font-medium transition-all hover:bg-[var(--pine-mid)] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-[var(--pine)]/20 active:translate-y-0 inline-flex items-center gap-2;
+  }
+
+  .btn-secondary {
+    @apply bg-transparent text-[var(--pine)] px-8 py-3.5 rounded-full font-medium border-2 border-[var(--pine)] transition-all hover:bg-[var(--pine-pale)] inline-flex items-center gap-2;
+  }
+
+  .section-tag {
+    @apply inline-block text-[10px] font-bold uppercase tracking-[0.2em] text-[var(--pine)] mb-4;
+  }
+
+  .glass-nav {
+    @apply bg-[var(--cream)]/80 backdrop-blur-xl border-b border-[var(--pine)]/10 sticky top-0 z-50;
+  }
+}
+
+/* Custom Utilities from User Code */
+.grid-lines {
+  background-image:
+    linear-gradient(var(--pine) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pine) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
