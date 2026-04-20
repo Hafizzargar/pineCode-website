@@ -25,8 +25,9 @@ const Contact = () => {
     };
 
     try {
-      // Connect to the new Node.js backend
-      const response = await axios.post('http://localhost:5001/api/contact', data);
+      // Use environment variable for API URL, fallback to localhost for dev
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
+      const response = await axios.post(`${apiUrl}/api/contact`, data);
       
       if (response.data.success) {
         setStatus("Message sent! We'll call you soon ✓");
