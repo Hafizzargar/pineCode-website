@@ -3,7 +3,7 @@
 @theme {
   --font-serif: var(--font-dm-serif), serif;
   --font-sans: var(--font-dm-sans), sans-serif;
-  --animate-marquee: marquee 40s linear infinite;
+  --animate-marquee: marquee 20s linear infinite;
 
   @keyframes marquee {
     from { transform: translateX(0); }
