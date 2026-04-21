@@ -3,11 +3,17 @@ import { useState, useRef, useEffect } from 'react';
 import { MessageCircle, X, Send } from 'lucide-react';
 import axios from 'axios';
 
+interface ChatMessage {
+  role: 'user' | 'model';
+  parts: { text: string }[];
+}
+
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState([
+  const [displayMessages, setDisplayMessages] = useState<{role: string, text: string}[]>([
     { role: 'bot', text: 'Hi! I\'m Piney, your PineCode AI assistant. How can I help you today?' }
   ]);
+  const [history, setHistory] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef<HTMLDivElement>(null);
@@ -18,24 +24,37 @@ const Chatbot = () => {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [displayMessages]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
-    setMessages(prev => [...prev, { role: 'user', text: userMessage }]);
+    
+    // Update local display
+    setDisplayMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setInput('');
     setIsLoading(true);
 
     try {
-      // Call our Next.js AI API route
-      const response = await axios.post('/api/chat', { message: userMessage });
+      // Call our Next.js AI API route with history
+      const response = await axios.post('/api/chat', { 
+        message: userMessage,
+        history: history
+      });
+      
       const botText = response.data.text;
-      setMessages(prev => [...prev, { role: 'bot', text: botText }]);
+      
+      // Update display and history
+      setDisplayMessages(prev => [...prev, { role: 'bot', text: botText }]);
+      setHistory(prev => [
+        ...prev, 
+        { role: 'user', parts: [{ text: userMessage }] },
+        { role: 'model', parts: [{ text: botText }] }
+      ]);
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, { role: 'bot', text: 'I\'m sorry, I\'m having trouble connecting to my brain right now. Please try again or use the contact form!' }]);
+      setDisplayMessages(prev => [...prev, { role: 'bot', text: 'I\'m sorry, I\'m having trouble connecting to my brain right now. Please try again or use the contact form!' }]);
     } finally {
       setIsLoading(false);
     }
@@ -67,7 +86,7 @@ const Chatbot = () => {
 
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-[var(--cream)]/30">
-            {messages.map((m, i) => (
+            {displayMessages.map((m, i) => (
               <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                 <div className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed ${
                   m.role === 'user' 
