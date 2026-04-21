@@ -34,7 +34,7 @@ export async function POST(req: Request) {
     }
 
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash-latest",
+      model: "gemini-pro",
     });
 
     // Use a simpler prompt if systemInstruction is causing issues in this version
