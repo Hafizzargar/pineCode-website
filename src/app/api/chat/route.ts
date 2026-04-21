@@ -32,9 +32,9 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "API Key not configured" }, { status: 500 });
     }
 
-    // Use gemini-1.5-flash as it is the most compatible across all API versions
+    // Use the latest available model from your account: gemini-2.5-flash
     const model = genAI.getGenerativeModel({ 
-      model: "gemini-1.5-flash",
+      model: "gemini-2.5-flash",
       systemInstruction: SYSTEM_PROMPT
     });
 
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     
     // Fallback if systemInstruction or model name fails
     try {
-      const modelFallback = genAI.getGenerativeModel({ model: "gemini-pro" });
+      const modelFallback = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
       const prompt = `${SYSTEM_PROMPT}\n\nUser: ${message}`;
       const result = await modelFallback.generateContent(prompt);
       const text = result.response.text();
