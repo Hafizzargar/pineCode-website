@@ -1,41 +1,82 @@
-import { ArrowRight } from 'lucide-react';
+'use client';
+import { ArrowRight, Box, CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
 
 const products = [
-  { name: 'CRM System', sub: 'Leads & customers', color: 'bg-[var(--pine)]' },
-  { name: 'POS & Billing', sub: 'Shops & retail', color: 'bg-[var(--pine)]' },
-  { name: 'Clinic Manager', sub: 'Doctors & labs', color: 'bg-[var(--pine)]' },
-  { name: 'Inventory', sub: 'Stock & suppliers', color: 'bg-[var(--pine)]' },
-  { name: 'Business Website', sub: 'Next.js + CMS', color: 'bg-[var(--pine)]' },
-  { name: 'Full Bundle', sub: 'All products, one price', color: 'bg-[var(--gold)]' },
+  { 
+    name: 'CRM System', 
+    sub: 'Leads & customers', 
+    features: ['Lead Tracking', 'Automatic Invoicing', 'Client Portal']
+  },
+  { 
+    name: 'POS & Billing', 
+    sub: 'Shops & retail', 
+    features: ['GST Ready', 'Inventory Sync', 'Barcode Support']
+  },
+  { 
+    name: 'Clinic Manager', 
+    sub: 'Doctors & labs', 
+    features: ['Appointments', 'Patient History', 'Digital Rx']
+  },
+  { 
+    name: 'Full Bundle', 
+    sub: 'All-in-one suite', 
+    features: ['Everything included', 'Priority Support', 'Cloud Backup'],
+    premium: true
+  },
 ];
 
 const Products = () => {
   return (
-    <section id="products" className="bg-[var(--cream)] px-[5%] py-32">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
-        <div>
-          <span className="section-tag">Ready-made products</span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl text-[var(--ink)] mb-8">
-            Buy off-the-shelf,<br/>customise to fit
+    <section id="products" className="bg-[var(--cream)] px-[5%] py-32 relative overflow-hidden">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-20">
+          <span className="section-tag">Ready-to-launch</span>
+          <h2 className="text-5xl lg:text-7xl font-serif text-[var(--pine)] mb-6">
+            Off-the-shelf <span className="text-gradient italic">solutions</span>
           </h2>
-          <p className="text-lg text-[var(--ink-soft)] font-light leading-relaxed max-w-[480px] mb-12">
-            Don't want to wait for a full custom build? Our ready products can be set up in days and customised for your brand and workflow.
+          <p className="text-xl text-[var(--ink)]/50 font-light max-w-2xl mx-auto">
+            Scale your business in days, not months. Our pre-built products are battle-tested and ready to deploy.
           </p>
-          <Link href="#contact" className="btn-primary">
-            See a live demo
-            <ArrowRight size={20} />
-          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {products.map((p, i) => (
-            <div key={i} className="bg-white p-6 rounded-full border border-[var(--pine)]/10 flex items-center gap-5 hover:border-[var(--pine)] hover:bg-[var(--pine-pale)] transition-all cursor-default group">
-              <div className={`w-3 h-3 rounded-full ${p.color} shrink-0 shadow-lg shadow-[var(--pine)]/20`}></div>
-              <div>
-                <div className="font-bold text-[var(--ink)] leading-none mb-1 group-hover:text-[var(--pine)] transition-colors">{p.name}</div>
-                <div className="text-[11px] text-[var(--ink-soft)] uppercase tracking-wider font-bold">{p.sub}</div>
+            <div key={i} className={`p-8 rounded-[40px] border transition-all duration-500 group ${
+              p.premium 
+                ? 'bg-[var(--pine)] text-white border-[var(--pine)] shadow-2xl shadow-[var(--pine)]/20' 
+                : 'bg-white border-[var(--pine)]/5 hover:border-[var(--pine)]/20 hover:-translate-y-2'
+            }`}>
+              <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-8 ${
+                p.premium ? 'bg-white/10 text-white' : 'bg-[var(--pine-pale)] text-[var(--pine)]'
+              }`}>
+                <Box size={24} strokeWidth={1.5} />
               </div>
+              
+              <h3 className="text-2xl font-serif mb-2">{p.name}</h3>
+              <p className={`text-xs uppercase tracking-widest font-bold mb-8 ${
+                p.premium ? 'text-white/60' : 'text-[var(--pine)]/40'
+              }`}>{p.sub}</p>
+
+              <div className="space-y-4 mb-10">
+                {p.features.map((f, j) => (
+                  <div key={j} className="flex items-center gap-3">
+                    <CheckCircle2 size={16} className={p.premium ? 'text-[var(--pine-glow)]' : 'text-[var(--pine)]'} />
+                    <span className={`text-sm ${p.premium ? 'text-white/80' : 'text-[var(--ink)]/60'}`}>{f}</span>
+                  </div>
+                ))}
+              </div>
+
+              <Link 
+                href="#contact" 
+                className={`w-full py-4 rounded-2xl text-sm font-bold flex items-center justify-center gap-2 transition-all ${
+                  p.premium 
+                    ? 'bg-white text-[var(--pine)] hover:bg-[var(--pine-glow)]' 
+                    : 'bg-[var(--pine)] text-white hover:bg-[var(--pine-mid)]'
+                }`}
+              >
+                Learn More <ArrowRight size={16} />
+              </Link>
             </div>
           ))}
         </div>

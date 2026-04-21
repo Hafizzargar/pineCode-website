@@ -6,6 +6,7 @@ import {
   Package, 
   Layers 
 } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const services = [
   {
@@ -48,33 +49,43 @@ const services = [
 
 const Services = () => {
   return (
-    <section id="services" className="bg-white px-[5%] py-32">
-      <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20">
+    <section id="services" className="bg-white px-[5%] py-32 relative">
+      <div className="pine-blur-orb bg-[var(--pine-glow)] w-[600px] h-[600px] -top-40 -right-40 opacity-5"></div>
+      
+      <div className="flex flex-col md:flex-row justify-between items-end gap-8 mb-20 relative z-10">
         <div>
           <span className="section-tag">What we build</span>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl text-[var(--ink)]">Software for every<br/>kind of business</h2>
+          <h2 className="text-5xl lg:text-7xl font-serif text-[var(--pine)] leading-[1.1]">
+            Software for every<br/>
+            <span className="text-gradient italic">kind of business</span>
+          </h2>
         </div>
-        <p className="text-lg text-[var(--ink-soft)] font-light max-w-[480px]">
-          Whether you're a clinic in Jammu or a startup in Delhi, we build exactly what you need.
+        <p className="text-lg text-[var(--ink)]/60 font-light max-w-[480px] leading-relaxed">
+          Whether you're a clinic in Jammu or a startup in Delhi, we build exactly what you need with premium engineering.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 relative z-10">
         {services.map((service, i) => (
-          <div key={i} className="group p-8 bg-[var(--cream)] border border-[var(--pine)]/10 rounded-3xl transition-all duration-300 hover:-translate-y-2 hover:shadow-2xl hover:shadow-[var(--pine)]/10 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--pine-pale)] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div 
+            key={i} 
+            className="group p-10 bg-[var(--cream)] border border-[var(--pine)]/5 rounded-[40px] transition-all duration-500 hover:bg-white hover:shadow-[0_40px_80px_-15px_rgba(10,47,31,0.08)] relative overflow-hidden"
+          >
+            <div className="absolute top-0 right-0 p-8 opacity-[0.03] group-hover:opacity-[0.08] transition-opacity">
+              <service.icon size={120} />
+            </div>
             
             <div className="relative z-10">
-              <div className="w-14 h-14 bg-[var(--pine-pale)] rounded-2xl flex items-center justify-center mb-8">
-                <service.icon size={28} className="text-[var(--pine)]" strokeWidth={1.5} />
+              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center mb-10 shadow-sm border border-[var(--pine)]/5 group-hover:bg-[var(--pine)] group-hover:text-white transition-colors duration-500">
+                <service.icon size={28} strokeWidth={1.5} />
               </div>
-              <h3 className="text-2xl font-bold text-[var(--ink)] mb-4">{service.title}</h3>
-              <p className="text-[15px] text-[var(--ink-soft)] leading-relaxed mb-8">
+              <h3 className="text-2xl font-serif text-[var(--pine)] mb-4">{service.title}</h3>
+              <p className="text-[16px] text-[var(--ink)]/60 leading-relaxed mb-10 min-h-[100px]">
                 {service.desc}
               </p>
               <div className="flex flex-wrap gap-2">
                 {service.tags.map((tag, j) => (
-                  <span key={j} className="text-[10px] font-bold uppercase tracking-widest text-[var(--ink-soft)] bg-white border border-[var(--pine)]/10 px-3 py-1.5 rounded-full">
+                  <span key={j} className="text-[9px] font-bold uppercase tracking-widest text-[var(--pine-mid)]/60 bg-white/50 px-4 py-2 rounded-full border border-[var(--pine)]/5">
                     {tag}
                   </span>
                 ))}
