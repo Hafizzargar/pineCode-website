@@ -8,11 +8,11 @@ const Hero = () => {
       {/* Background Decor */}
       <div className="pine-blur-orb bg-[var(--pine)] w-[300px] md:w-[500px] h-[300px] md:h-[500px] -top-20 -left-20 animate-pulse"></div>
       <div className="pine-blur-orb bg-[var(--pine-glow)] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bottom-0 right-0 opacity-10"></div>
-      
+
       <div className="absolute inset-0 z-0 opacity-[0.03] grid-lines"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
@@ -61,23 +61,23 @@ const Hero = () => {
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.2 }}
           className="relative hidden lg:block"
         >
           <div className="relative z-10 glass-card p-4 aspect-square flex items-center justify-center overflow-hidden group">
-             <div className="absolute inset-0 bg-gradient-to-tr from-[var(--pine)] to-[var(--pine-light)] opacity-5 group-hover:opacity-10 transition-opacity"></div>
-             <div className="text-center">
-                <div className="text-[10rem] font-serif text-[var(--pine)] leading-none opacity-10">🌲</div>
-                <div className="mt-[-2rem] font-serif text-3xl text-[var(--pine)]">PineCode</div>
-                <div className="text-[10px] uppercase tracking-[0.4em] text-[var(--pine-mid)] opacity-40 mt-2">Solutions</div>
-             </div>
+            <div className="absolute inset-0 bg-gradient-to-tr from-[var(--pine)] to-[var(--pine-light)] opacity-5 group-hover:opacity-10 transition-opacity"></div>
+            <div className="text-center">
+              <div className="text-[10rem] font-serif text-[var(--pine)] leading-none opacity-10">🌲</div>
+              <div className="mt-[-2rem] font-serif text-3xl text-[var(--pine)]">PineCode</div>
+              <div className="text-[10px] uppercase tracking-[0.4em] text-[var(--pine-mid)] opacity-40 mt-2">Solutions</div>
+            </div>
           </div>
 
           {/* Floating badges */}
-          <motion.div 
+          <motion.div
             animate={{ y: [0, -10, 0] }}
             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
             className="absolute -top-6 -right-6 bg-white p-4 rounded-2xl shadow-xl border border-[var(--pine)]/5 flex items-center gap-4 z-20"
