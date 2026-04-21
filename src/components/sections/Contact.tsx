@@ -1,12 +1,24 @@
 'use client';
 import { useState, useRef } from 'react';
-import { Phone, Mail, MapPin, Send } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, ChevronDown } from 'lucide-react';
 import axios from 'axios';
 
 const Contact = () => {
   const [status, setStatus] = useState('Send message');
   const [isSent, setIsSent] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
+
+  const services = [
+    'Business Website',
+    'CRM System',
+    'POS & Billing Software',
+    'Clinic Management',
+    'Inventory System',
+    'Full Bundle (all products)',
+    'Custom Software'
+  ];
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,33 +32,30 @@ const Contact = () => {
       businessName: formData.get('businessName'),
       email: formData.get('email'),
       phone: formData.get('phone'),
-      service: formData.get('service'),
+      service: selectedService || 'Not specified',
       message: formData.get('message'),
     };
 
     try {
-      // Use environment variable for API URL, fallback to localhost for dev
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001';
       const response = await axios.post(`${apiUrl}/api/contact`, data);
       
       if (response.data.success) {
-        setStatus("Message sent! We'll call you soon ✓");
+        setStatus("Message sent! ✓");
         setIsSent(true);
         formRef.current.reset();
+        setSelectedService('');
       } else {
-        setStatus("Error sending message. Try again.");
+        setStatus("Error. Try again.");
       }
     } catch (error) {
       console.error('Submission error:', error);
-      setStatus("Error sending message. Try again.");
+      setStatus("Error. Try again.");
     } finally {
-      // Reset button after 5 seconds if sent
-      if (isSent) {
-        setTimeout(() => {
-          setStatus('Send message');
-          setIsSent(false);
-        }, 5000);
-      }
+      setTimeout(() => {
+        setStatus('Send message');
+        setIsSent(false);
+      }, 5000);
     }
   };
 
@@ -61,7 +70,7 @@ const Contact = () => {
           <span className="section-tag !text-[var(--pine-glow)]">Get in touch</span>
           <h2 className="text-4xl md:text-5xl lg:text-6xl text-white mb-8">Let's build<br/>something great</h2>
           <p className="text-lg text-white/50 font-light max-w-[460px] mb-12">
-            Tell us about your business and what you need. We'll get back to you within 24 hours with a free consultation.
+            Tell us about your business and what you need. We'll get back to you within 24 hours.
           </p>
 
           <div className="space-y-8">
@@ -83,76 +92,53 @@ const Contact = () => {
                 <div className="text-lg font-medium">pinecode47@gmail.com</div>
               </div>
             </div>
-            <div className="flex gap-5">
-              <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center shrink-0 border border-white/10">
-                <MapPin size={20} className="text-[var(--pine-glow)]" strokeWidth={1.5} />
-              </div>
-              <div>
-                <div className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Location</div>
-                <div className="text-lg font-medium">Jammu, Jammu & Kashmir, India</div>
-              </div>
-            </div>
           </div>
         </div>
 
-        <form ref={formRef} onSubmit={handleSubmit} className="bg-white/5 p-10 md:p-12 rounded-[40px] border border-white/10 backdrop-blur-sm">
+        <form ref={formRef} onSubmit={handleSubmit} className="bg-white/5 p-8 md:p-10 rounded-[40px] border border-white/10 backdrop-blur-sm">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <input 
-              name="name"
-              type="text" 
-              placeholder="Your name" 
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[var(--pine-glow)] transition-all placeholder:text-white/20" 
-            />
-            <input 
-              name="businessName"
-              type="text" 
-              placeholder="Business name" 
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[var(--pine-glow)] transition-all placeholder:text-white/20" 
-            />
+            <input name="name" type="text" placeholder="Your name" required className="form-input" />
+            <input name="businessName" type="text" placeholder="Business name" className="form-input" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-            <input 
-              name="email"
-              type="email" 
-              placeholder="Email address" 
-              required
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[var(--pine-glow)] transition-all placeholder:text-white/20" 
-            />
-            <input 
-              name="phone"
-              type="tel" 
-              placeholder="Phone / WhatsApp" 
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[var(--pine-glow)] transition-all placeholder:text-white/20" 
-            />
+            <input name="email" type="email" placeholder="Email address" required className="form-input" />
+            <input name="phone" type="tel" placeholder="Phone / WhatsApp" className="form-input" />
           </div>
+          
+          {/* Custom Premium Dropdown */}
           <div className="mb-6 relative">
-            <select 
-              name="service"
-              defaultValue="" 
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[var(--pine-glow)] transition-all text-white/40 appearance-none cursor-pointer"
+            <div 
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className={`w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 flex items-center justify-between cursor-pointer transition-all hover:border-white/20 ${isDropdownOpen ? 'border-[var(--pine-glow)]' : ''}`}
             >
-              <option value="" disabled>What do you need?</option>
-              <option>Business Website</option>
-              <option>CRM System</option>
-              <option>POS & Billing Software</option>
-              <option>Clinic Management</option>
-              <option>Inventory System</option>
-              <option>Full Bundle (all products)</option>
-              <option>Custom Software</option>
-            </select>
-            <div className="absolute right-6 top-1/2 -translate-y-1/2 pointer-events-none text-white/20">
-              <Send size={16} className="rotate-90" />
+              <span className={selectedService ? 'text-white' : 'text-white/30'}>
+                {selectedService || 'What do you need?'}
+              </span>
+              <ChevronDown size={20} className={`text-white/20 transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
             </div>
+
+            {isDropdownOpen && (
+              <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-[#2d3a30] border border-white/10 rounded-2xl overflow-hidden z-50 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+                {services.map((service) => (
+                  <div 
+                    key={service}
+                    onClick={() => {
+                      setSelectedService(service);
+                      setIsDropdownOpen(false);
+                    }}
+                    className="px-6 py-4 text-white/70 hover:text-white hover:bg-white/5 cursor-pointer transition-colors border-b border-white/5 last:border-0"
+                  >
+                    {service}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
+
           <div className="mb-8">
-            <textarea 
-              name="message"
-              rows={4} 
-              placeholder="Tell us about your business and what you're looking for..." 
-              className="w-full bg-white/5 border border-white/10 rounded-2xl px-6 py-4 outline-none focus:border-[var(--pine-glow)] transition-all placeholder:text-white/20 resize-none"
-            ></textarea>
+            <textarea name="message" rows={4} placeholder="Tell us about your business..." className="form-input resize-none"></textarea>
           </div>
+          
           <button 
             type="submit"
             disabled={isSent || status === 'Sending...'}
@@ -165,6 +151,26 @@ const Contact = () => {
           </button>
         </form>
       </div>
+
+      <style jsx>{`
+        .form-input {
+          width: 100%;
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 16px;
+          padding: 16px 24px;
+          outline: none;
+          color: white;
+          transition: all 0.2s;
+        }
+        .form-input:focus {
+          border-color: var(--pine-glow);
+          background: rgba(255, 255, 255, 0.08);
+        }
+        .form-input::placeholder {
+          color: rgba(255, 255, 255, 0.2);
+        }
+      `}</style>
     </section>
   );
 };
