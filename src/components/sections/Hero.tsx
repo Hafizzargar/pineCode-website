@@ -6,7 +6,7 @@ const Hero = () => {
   return (
     <section className="min-h-[85vh] md:min-h-[90vh] flex flex-col justify-center px-[5%] pt-36 md:pt-20 pb-20 relative overflow-hidden bg-[var(--cream)]">
       {/* Background Decor */}
-      <div className="pine-blur-orb bg-[var(--pine)] w-[300px] md:w-[500px] h-[300px] md:h-[500px] -top-20 -left-20 animate-pulse"></div>
+      <div className="pine-blur-orb bg-[var(--pine)] w-[100px] md:w-[300px] h-[300px] md:h-[500px] -top-20 -left-20 animate-pulse"></div>
       <div className="pine-blur-orb bg-[var(--pine-glow)] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bottom-0 right-0 opacity-10"></div>
 
       <div className="absolute inset-0 z-0 opacity-[0.03] grid-lines"></div>

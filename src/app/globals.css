@@ -24,8 +24,8 @@
 }
 
 @layer base {
-  body {
-    @apply bg-[var(--cream)] text-[var(--ink)] antialiased;
+  html, body {
+    @apply bg-[var(--cream)] text-[var(--ink)] antialiased overflow-x-hidden;
   }
 
   h1, h2, h3, .font-serif {

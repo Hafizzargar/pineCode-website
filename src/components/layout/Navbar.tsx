@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <header
-      className={`fixed left-1/2 -translate-x-1/2 w-[92%] md:w-[90%] max-w-7xl z-50 transition-all duration-500 ${scrolled ? 'top-2 md:top-4' : 'top-4 md:top-10'
+      className={`fixed left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-[90%] max-w-7xl z-50 transition-all duration-500 ${scrolled ? 'top-0 md:top-4' : 'top-0 md:top-10'
         }`}
     >
       <nav className={`bg-white/80 backdrop-blur-xl border border-white/20 rounded-full px-4 md:px-6 py-2 md:py-3 flex items-center justify-between shadow-lg shadow-[var(--pine)]/5 transition-all ${scrolled ? 'md:py-2 md:px-4 scale-95 md:scale-100' : ''
