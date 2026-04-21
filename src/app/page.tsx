@@ -9,6 +9,7 @@ import Testimonials from '@/components/sections/Testimonials';
 import Pricing from '@/components/sections/Pricing';
 import Contact from '@/components/sections/Contact';
 import Footer from '@/components/layout/Footer';
+import Chatbot from '@/components/ui/Chatbot';
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <Pricing />
       <Contact />
       <Footer />
+      <Chatbot />
     </main>
   );
 }
