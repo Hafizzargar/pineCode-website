@@ -27,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
-      <body className={`${dmSans.variable} ${dmSerif.variable} font-sans`}>
+      <body 
+        className={`${dmSans.variable} ${dmSerif.variable} font-sans`}
+        suppressHydrationWarning={true}
+      >
         {children}
       </body>
     </html>
