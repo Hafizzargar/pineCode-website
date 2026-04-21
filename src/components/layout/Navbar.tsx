@@ -25,9 +25,8 @@ const Navbar = () => {
   return (
     <header
       className={`fixed z-50 transition-all duration-500 
-        left-0 right-0 px-4 md:px-0
-        md:left-1/2 md:-translate-x-1/2 md:w-[90%] md:max-w-7xl
-        ${scrolled ? 'top-2 md:top-4' : 'top-3 md:top-10'}`}
+        left-1/2 -translate-x-1/2 w-[92%] md:w-[90%] md:max-w-7xl
+        ${scrolled ? 'top-2 md:top-4' : 'top-4 md:top-10'}`}
     >
       <nav className={`bg-white/95 backdrop-blur-xl border border-white/20 rounded-full 
         px-5 md:px-8 py-2.5 md:py-3.5 

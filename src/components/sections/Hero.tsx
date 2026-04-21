@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 const Hero = () => {
   return (
-    <section className="min-h-[85vh] md:min-h-[90vh] flex flex-col justify-center px-[5%] pt-36 md:pt-20 pb-20 relative overflow-hidden bg-[var(--cream)]">
+    <section className="min-h-[85vh] md:min-h-[90vh] flex flex-col justify-center px-[5%] pt-48 md:pt-20 pb-20 relative overflow-hidden bg-[var(--cream)]">
       {/* Background Decor */}
       <div className="pine-blur-orb bg-[var(--pine)] w-[100px] md:w-[300px] h-[300px] md:h-[500px] -top-20 -left-20 animate-pulse"></div>
       <div className="pine-blur-orb bg-[var(--pine-glow)] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bottom-0 right-0 opacity-10"></div>
@@ -30,7 +30,7 @@ const Hero = () => {
             <span className="text-[10px] text-[var(--pine-mid)] font-bold uppercase tracking-widest opacity-40">Trusted in J&K</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-serif text-[var(--pine)] leading-[1.1] mb-8">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-serif text-[var(--pine)] leading-[1.1] mb-8">
             Digital tools <br />
             <span className="text-gradient italic">crafted for</span> <br />
             growth.
