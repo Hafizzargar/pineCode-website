@@ -17,8 +17,7 @@ Our Products:
 Location: Jammu, Jammu & Kashmir.
 Email: pinecode47@gmail.com
 
-Be professional, friendly, and concise. If you don't know an answer, ask the user to fill out the contact form on the website.
-Keep your responses short (2-3 sentences max).
+Be professional, friendly, and concise. Keep your responses short (2-3 sentences max).
 `;
 
 export async function POST(req: Request) {
@@ -29,18 +28,25 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
     }
 
+    if (!process.env.GEMINI_API_KEY) {
+      console.error("Missing GEMINI_API_KEY in environment variables");
+      return NextResponse.json({ error: "API Key not configured" }, { status: 500 });
+    }
+
     const model = genAI.getGenerativeModel({ 
       model: "gemini-1.5-flash",
-      systemInstruction: SYSTEM_PROMPT 
     });
 
-    const result = await model.generateContent(message);
+    // Use a simpler prompt if systemInstruction is causing issues in this version
+    const prompt = `${SYSTEM_PROMPT}\n\nUser Question: ${message}`;
+
+    const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
     return NextResponse.json({ text });
-  } catch (error) {
-    console.error("Gemini API Error:", error);
-    return NextResponse.json({ error: "Failed to fetch response from AI" }, { status: 500 });
+  } catch (error: any) {
+    console.error("Gemini API Error details:", error.message || error);
+    return NextResponse.json({ error: "Failed to fetch response from AI", details: error.message }, { status: 500 });
   }
 }
