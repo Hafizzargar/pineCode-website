@@ -21,8 +21,13 @@ Keep your responses short (2-3 sentences max).
 `;
 
 export async function POST(req: Request) {
+  let message = "";
+  let history = [];
+  
   try {
-    const { message, history } = await req.json();
+    const body = await req.json();
+    message = body.message;
+    history = body.history || [];
 
     if (!message) {
       return NextResponse.json({ error: "Message is required" }, { status: 400 });
