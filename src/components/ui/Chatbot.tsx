@@ -1,150 +1,137 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send } from 'lucide-react';
-import axios from 'axios';
+import { MessageCircle, X, Send, Loader2, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-interface ChatMessage {
+interface Message {
   role: 'user' | 'model';
-  parts: { text: string }[];
+  content: string;
 }
 
 const Chatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [displayMessages, setDisplayMessages] = useState<{role: string, text: string}[]>([
-    { role: 'bot', text: 'Hi! I\'m Piney, your PineCode AI assistant. How can I help you today?' }
+  const [messages, setMessages] = useState<Message[]>([
+    { role: 'model', content: "Hi! I'm Piney. How can I help you with your software or website today? 🌲" }
   ]);
-  const [history, setHistory] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const chatEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [displayMessages]);
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
     const userMessage = input.trim();
-    
-    // Update local display
-    setDisplayMessages(prev => [...prev, { role: 'user', text: userMessage }]);
     setInput('');
+    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setIsLoading(true);
 
     try {
-      // Call our Next.js AI API route with history
-      const response = await axios.post('/api/chat', { 
-        message: userMessage,
-        history: history
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userMessage, history: messages }),
       });
-      
-      const botText = response.data.text;
-      
-      // Update display and history
-      setDisplayMessages(prev => [...prev, { role: 'bot', text: botText }]);
-      setHistory(prev => [
-        ...prev, 
-        { role: 'user', parts: [{ text: userMessage }] },
-        { role: 'model', parts: [{ text: botText }] }
-      ]);
+
+      const data = await response.json();
+      if (data.reply) {
+        setMessages(prev => [...prev, { role: 'model', content: data.reply }]);
+      } else {
+        throw new Error('No reply');
+      }
     } catch (error) {
-      console.error('Chat error:', error);
-      setDisplayMessages(prev => [...prev, { role: 'bot', text: 'I\'m sorry, I\'m having trouble connecting to my brain right now. Please try again or use the contact form!' }]);
+      setMessages(prev => [...prev, { role: 'model', content: "I'm having a little trouble connecting. Please try again or reach out via the contact form! 🌲" }]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="fixed bottom-8 right-8 z-[100] font-sans">
-      {/* Chat Window */}
-      {isOpen && (
-        <div className="absolute bottom-20 right-0 w-[350px] md:w-[400px] h-[500px] bg-white border border-[var(--pine)]/10 rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300">
-          {/* Header */}
-          <div className="bg-[var(--pine)] p-5 text-white flex justify-between items-center">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
-                <MessageCircle size={20} className="text-[var(--pine-glow)]" />
-              </div>
-              <div>
-                <div className="font-bold text-sm">PineCode AI Assistant</div>
-                <div className="flex items-center gap-1.5 text-[10px] text-[var(--pine-glow)] uppercase tracking-widest font-black">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[var(--pine-glow)] animate-pulse"></span>
-                  Online
+    <div className="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-[100] flex flex-col items-end">
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            className="mb-4 w-[calc(100vw-2rem)] sm:w-[380px] bg-white rounded-[32px] shadow-2xl border border-[var(--pine)]/5 overflow-hidden flex flex-col h-[500px] md:h-[600px]"
+          >
+            {/* Header */}
+            <div className="bg-[var(--pine)] p-6 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 bg-[var(--pine-glow)] rounded-full flex items-center justify-center">
+                  <Sparkles size={20} className="text-[var(--pine)]" />
+                </div>
+                <div>
+                  <div className="text-white font-bold text-sm">Piney</div>
+                  <div className="text-[var(--pine-glow)]/60 text-[10px] uppercase tracking-widest font-black">AI Assistant</div>
                 </div>
               </div>
+              <button onClick={() => setIsOpen(false)} className="text-white/40 hover:text-white transition-colors">
+                <X size={20} />
+              </button>
             </div>
-            <button onClick={() => setIsOpen(false)} className="hover:bg-white/10 p-2 rounded-full transition-colors">
-              <X size={20} />
-            </button>
-          </div>
 
-          {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-[var(--cream)]/30">
-            {displayMessages.map((m, i) => (
-              <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                <div className={`max-w-[80%] p-4 rounded-2xl text-sm leading-relaxed ${
-                  m.role === 'user' 
-                    ? 'bg-[var(--pine)] text-white rounded-tr-none shadow-lg' 
-                    : 'bg-white text-[var(--ink)] border border-[var(--pine)]/5 rounded-tl-none shadow-sm'
-                }`}>
-                  {m.text}
-                </div>
-              </div>
-            ))}
-            {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-white text-[var(--ink)] border border-[var(--pine)]/5 rounded-2xl rounded-tl-none p-4 shadow-sm">
-                  <div className="flex gap-1">
-                    <span className="w-1.5 h-1.5 bg-[var(--pine-glow)] rounded-full animate-bounce"></span>
-                    <span className="w-1.5 h-1.5 bg-[var(--pine-glow)] rounded-full animate-bounce [animation-delay:0.2s]"></span>
-                    <span className="w-1.5 h-1.5 bg-[var(--pine-glow)] rounded-full animate-bounce [animation-delay:0.4s]"></span>
+            {/* Messages */}
+            <div ref={scrollRef} className="flex-1 overflow-y-auto p-6 space-y-4 bg-[var(--cream)]/30">
+              {messages.map((m, i) => (
+                <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[85%] px-4 py-3 rounded-2xl text-sm ${
+                    m.role === 'user' 
+                      ? 'bg-[var(--pine)] text-white rounded-tr-none' 
+                      : 'bg-white border border-[var(--pine)]/5 text-[var(--ink)] shadow-sm rounded-tl-none'
+                  }`}>
+                    {m.content}
                   </div>
                 </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start">
+                  <div className="bg-white border border-[var(--pine)]/5 p-3 rounded-2xl rounded-tl-none shadow-sm">
+                    <Loader2 size={16} className="animate-spin text-[var(--pine)]" />
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Input */}
+            <div className="p-4 bg-white border-t border-[var(--pine)]/5">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                  placeholder="Ask me anything..."
+                  className="flex-1 bg-[var(--cream)] border-none rounded-xl px-4 py-3 text-sm focus:ring-1 focus:ring-[var(--pine)] outline-none"
+                />
+                <button 
+                  onClick={handleSend}
+                  disabled={isLoading || !input.trim()}
+                  className="w-11 h-11 bg-[var(--pine)] text-white rounded-xl flex items-center justify-center hover:bg-[var(--pine-mid)] transition-all disabled:opacity-50"
+                >
+                  <Send size={18} />
+                </button>
               </div>
-            )}
-            <div ref={chatEndRef} />
-          </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-          {/* Input */}
-          <div className="p-4 bg-white border-t border-[var(--pine)]/10 flex gap-2">
-            <input 
-              type="text" 
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-              placeholder={isLoading ? "Piney is thinking..." : "Ask me anything..."}
-              disabled={isLoading}
-              className="flex-1 bg-[var(--cream)] border border-[var(--pine)]/10 rounded-full px-5 py-3 text-sm outline-none focus:border-[var(--pine)] transition-all disabled:opacity-50"
-            />
-            <button 
-              onClick={handleSend}
-              disabled={isLoading}
-              className="w-11 h-11 bg-[var(--pine)] text-white rounded-full flex items-center justify-center hover:bg-[var(--pine-mid)] transition-all active:scale-95 shadow-lg shadow-[var(--pine)]/20 shrink-0 disabled:opacity-50"
-            >
-              <Send size={18} />
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Toggle Button */}
-      <button 
+      <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-16 h-16 rounded-full flex items-center justify-center shadow-2xl transition-all duration-300 active:scale-90 relative group ${
-          isOpen ? 'bg-white text-[var(--pine)] rotate-90' : 'bg-[var(--pine)] text-white hover:bg-[var(--pine-mid)]'
-        }`}
+        className="w-14 h-14 md:w-16 md:h-16 bg-[var(--pine)] text-white rounded-full flex items-center justify-center shadow-2xl hover:scale-105 transition-all group relative"
       >
         {isOpen ? <X size={28} /> : <MessageCircle size={28} />}
         {!isOpen && (
-          <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--gold)] text-[var(--ink)] text-[10px] font-black rounded-full flex items-center justify-center border-2 border-white">
-            1
-          </span>
+           <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--pine-glow)] text-[var(--pine)] text-[10px] font-bold rounded-full flex items-center justify-center border-2 border-white">
+             1
+           </span>
         )}
       </button>
     </div>

@@ -4,20 +4,21 @@ import { motion } from 'framer-motion';
 
 const Hero = () => {
   return (
-    <section className="min-h-[90vh] flex flex-col justify-center px-[5%] pt-20 pb-20 relative overflow-hidden bg-[var(--cream)]">
+    <section className="min-h-[85vh] md:min-h-[90vh] flex flex-col justify-center px-[5%] pt-28 md:pt-20 pb-20 relative overflow-hidden bg-[var(--cream)]">
       {/* Background Decor */}
-      <div className="pine-blur-orb bg-[var(--pine)] w-[500px] h-[500px] -top-20 -left-20 animate-pulse"></div>
-      <div className="pine-blur-orb bg-[var(--pine-glow)] w-[400px] h-[400px] bottom-0 right-0 opacity-10"></div>
+      <div className="pine-blur-orb bg-[var(--pine)] w-[300px] md:w-[500px] h-[300px] md:h-[500px] -top-20 -left-20 animate-pulse"></div>
+      <div className="pine-blur-orb bg-[var(--pine-glow)] w-[250px] md:w-[400px] h-[250px] md:h-[400px] bottom-0 right-0 opacity-10"></div>
       
       <div className="absolute inset-0 z-0 opacity-[0.03] grid-lines"></div>
 
       <div className="relative z-10 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
         <motion.div 
-          initial={{ opacity: 0, x: -30 }}
-          animate={{ opacity: 1, x: 0 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
+          className="text-center lg:text-left"
         >
-          <div className="flex items-center gap-2 mb-6">
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-6">
             <span className="section-tag mb-0">Software for Startups</span>
             <div className="flex -space-x-2">
               {[1, 2, 3].map(i => (
@@ -29,33 +30,33 @@ const Hero = () => {
             <span className="text-[10px] text-[var(--pine-mid)] font-bold uppercase tracking-widest opacity-40">Trusted in J&K</span>
           </div>
 
-          <h1 className="text-6xl md:text-8xl font-serif text-[var(--pine)] leading-[1.1] mb-8">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-serif text-[var(--pine)] leading-[1.1] mb-8">
             Digital tools <br />
             <span className="text-gradient italic">crafted for</span> <br />
             growth.
           </h1>
 
-          <p className="text-xl text-[var(--ink)]/60 font-light max-w-xl mb-10 leading-relaxed">
+          <p className="text-base md:text-xl text-[var(--ink)]/60 font-light max-w-xl mx-auto lg:mx-0 mb-10 leading-relaxed">
             We build high-performance software and websites that help local businesses scale. From CRM systems to premium web design.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <a href="#contact" className="btn-primary flex items-center justify-center gap-3">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+            <a href="#contact" className="btn-primary flex items-center justify-center gap-3 w-full sm:w-auto">
               Start your project <ArrowRight size={20} />
             </a>
-            <a href="#products" className="px-8 py-4 rounded-full font-bold border border-[var(--pine)]/10 flex items-center justify-center gap-3 hover:bg-[var(--pine)]/5 transition-all">
+            <a href="#products" className="px-8 py-4 rounded-full font-bold border border-[var(--pine)]/10 flex items-center justify-center gap-3 hover:bg-[var(--pine)]/5 transition-all w-full sm:w-auto">
               Our Products
             </a>
           </div>
 
-          <div className="mt-12 flex items-center gap-8 opacity-40">
+          <div className="mt-12 flex items-center justify-center lg:justify-start gap-6 md:gap-8 opacity-40">
             <div className="flex items-center gap-2">
               <Sparkles size={16} />
-              <span className="text-xs font-bold uppercase tracking-widest">Next.js 15</span>
+              <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">Next.js 15</span>
             </div>
             <div className="flex items-center gap-2">
               <Sparkles size={16} />
-              <span className="text-xs font-bold uppercase tracking-widest">MongoDB</span>
+              <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest">MongoDB</span>
             </div>
           </div>
         </motion.div>
